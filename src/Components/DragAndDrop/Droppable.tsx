@@ -8,8 +8,8 @@ const Droppable: React.FC<React.PropsWithChildren<{id: string}>> = ({id, childre
     id: id,
   });
   const style = {
-    height: "200px",
-    opacity: isOver ? 1 : 0.5,
+    height: "125px",
+    opacity: isOver ? 0.5 : 1,
   };
 
   return (

@@ -47,8 +47,8 @@ const ImageProvider: React.FC<{
           src={`/img/card_back_red.png`}
           alt="spade"
           style={{
-            width: "100px",
-            height: "145px",
+            width: "90px",
+            height: "125px",
           }}
           onContextMenu={preventContextMenu}
         />
@@ -57,8 +57,8 @@ const ImageProvider: React.FC<{
           src={`/img/${Cards[suit][rank - 1]}.png`}
           alt={`rank = ${rank}, suit = ${suit}`}
           style={{
-            width: "100px",
-            height: "145px",
+            width: "90px",
+            height: "125px",
           }}
           onContextMenu={preventContextMenu}
         />

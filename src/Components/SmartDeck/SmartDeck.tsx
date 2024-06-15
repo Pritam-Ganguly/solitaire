@@ -3,6 +3,7 @@ import { Card, Col } from "react-bootstrap";
 import DeckStack from "./DeckStack";
 import { ICardData, IDraggedCard } from "../../Playground/Solitaire";
 import YardStack from "./YardStack";
+import { useState } from "react";
 
 interface ISmartDeckProps {
   onDrag: (cardDetails: IDraggedCard | null) => void;
@@ -19,10 +20,12 @@ const SmartDeck: React.FC<ISmartDeckProps> = ({
   setDeckCardStack,
   setYardCardStack,
 }) => {
+  const [animateStyle, setAnimateStyle] = useState<boolean>(false);
   const currCard = yardCardStack.length === 0 ? null : yardCardStack[0];
   const prevCard = yardCardStack.length <= 1 ? null : yardCardStack[1];
 
   const handleDeckClick = () => {
+    setAnimateStyle(prev => !prev)
     setYardCardStack((prevState) => [deckCardStack[0], ...prevState]);
     setDeckCardStack((prevData) => prevData.slice(1));
   };
@@ -41,7 +44,7 @@ const SmartDeck: React.FC<ISmartDeckProps> = ({
           <DeckStack onClick={handleDeckClick} />
         )}
       </Col>
-      <Col>
+      <Col className={`yard ${animateStyle ? "soft": "soft_alt"}`}>
         <YardStack
           currCard={currCard}
           prevCard={prevCard}
