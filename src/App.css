@@ -1,38 +1,43 @@
 .App {
   text-align: center;
+  border: 1px solid black;
+  width: auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.playground{
+  border: 2px solid #0c823b;
+  border-radius: 10px;
+  background-color: rgb(16, 184, 69);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  height: 750px;
+  padding: 20px 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.card {
+  width: 100px;
+  height: 145px;
+  background-color: rgb(17, 169, 65);
+  border: 1px solid black;
+  border-radius: 4px;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  opacity: 100%;
+  z-index: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.deckStack img{ 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid black ;
+} 
+
+.emptyCard {
+  z-index: -1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.yardStack {
+  background-image: url('../public/img/card_back_red.png');
+  background-size: cover; /* or 'contain' or specific dimensions like '100px 100px' */
+  background-position: center; /* or 'top', 'bottom', 'left', 'right', 'center center' */
+  background-repeat: no-repeat; /* or 'repeat', 'repeat-x', 'repeat-y' */
 }
