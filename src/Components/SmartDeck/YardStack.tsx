@@ -3,6 +3,8 @@ import { Card } from "react-bootstrap";
 import PokerCard from "../PokerCard";
 import { ICardData, IDraggedCard } from "../../Playground/Solitaire";
 import { Cards } from "../../assets/img/ImageProvider";
+import { animated, useSpringRef, useTransition } from "@react-spring/web";
+import { useEffect, useState } from "react";
 
 interface IYardStack {
   currCard: ICardData | null;
@@ -15,6 +17,28 @@ const YardStack: React.FC<IYardStack> = ({
   prevCard,
   onDragging,
 }) => {
+  const [statusCard, setStatusCard] = useState<ICardData | null>(null);
+  const [rerender, setRerender] = useState<number>(0);
+
+  const transRef = useSpringRef();
+  const transitions = useTransition(rerender, {
+    ref: transRef,
+    keys: null,
+    from: { opacity: 0, transform: "translate3d(-100%,0,0)" },
+    enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
+  });
+
+  useEffect(() => {
+    if (currCard !== statusCard) {
+      setRerender((prev) => prev + 1);
+    }
+    setStatusCard(prevCard);
+  }, [currCard]);
+
+  useEffect(() => {
+    transRef.start();
+  }, [rerender]);
+
   const yardStackStyle = {
     backgroundImage:
       prevCard !== null
@@ -27,15 +51,25 @@ const YardStack: React.FC<IYardStack> = ({
 
   const cardDraggable =
     currCard !== null ? (
-      <PokerCard
-        isHidden={false}
-        rank={currCard.rank}
-        suit={currCard.suit}
-        onDragging={onDragging}
-        id="Yard"
-      />
+      <>
+        {transitions((style, _) => {
+          return (
+            <animated.div style={{ ...style }}>
+              <PokerCard
+                isHidden={false}
+                rank={currCard.rank}
+                suit={currCard.suit}
+                onDragging={onDragging}
+                id="Yard"
+              />
+            </animated.div>
+          );
+        })}
+      </>
     ) : (
-      <Card></Card>
+      <>
+        <Card></Card>
+      </>
     );
 
   return (
