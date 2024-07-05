@@ -22,34 +22,6 @@ export interface ICardData {
 }
 
 const Solitaire: React.FC = () => {
-  const checkSuite = (st: string) => {
-    switch (st) {
-      case "C":
-        return Suite.clubs;
-      case "H":
-        return Suite.hearts;
-      case "D":
-        return Suite.diamonds;
-      case "S":
-        return Suite.spades;
-    }
-  };
-
-  const checkRank = (st: string) => {
-    switch (st) {
-      case "A":
-        return 1;
-      case "J":
-        return 11;
-      case "Q":
-        return 12;
-      case "K":
-        return 13;
-      default:
-        return Number(st);
-    }
-  };
-
   const [draggedCard, setDraggedCardDetails] = useState<IDraggedCard | null>(
     null
   );
@@ -217,6 +189,10 @@ const Solitaire: React.FC = () => {
     fetchData(randomValue);
   }, []);
 
+  useEffect(() => {
+    checkForFoundation();
+  }, [foundationClubs, foundationDiamonds, foundationHearts, foundationSpades]);
+
   const tableauCardCheck = (
     stack: IDraggedCard[],
     setStack: React.Dispatch<React.SetStateAction<IDraggedCard[]>>
@@ -292,9 +268,33 @@ const Solitaire: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    checkForFoundation();
-  }, [foundationClubs, foundationDiamonds, foundationHearts, foundationSpades]);
+  const checkSuite = (st: string) => {
+    switch (st) {
+      case "C":
+        return Suite.clubs;
+      case "H":
+        return Suite.hearts;
+      case "D":
+        return Suite.diamonds;
+      case "S":
+        return Suite.spades;
+    }
+  };
+
+  const checkRank = (st: string) => {
+    switch (st) {
+      case "A":
+        return 1;
+      case "J":
+        return 11;
+      case "Q":
+        return 12;
+      case "K":
+        return 13;
+      default:
+        return Number(st);
+    }
+  };
 
   const checkForFoundation = () => {
     if (yardCardStack.length > 0) {
