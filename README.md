@@ -6,7 +6,7 @@ Screens:
 
 ![alt text](image.png)
 
-# TODO: 
+### TODOs: 
 
 1. Need to create proper scenarios. 
 2. Need to fix some minor bugs regarding drag and drop.
