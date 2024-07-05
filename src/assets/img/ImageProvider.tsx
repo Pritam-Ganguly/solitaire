@@ -1,6 +1,6 @@
 import { Suite } from "../../Components/PokerCard";
 
-const handleSpacialCard: (rank: number) => number | string = (rank: number) => {
+const handleSpecialCard: (rank: number) => number | string = (rank: number) => {
   switch (rank) {
     case 1:
       return "ace";
@@ -14,18 +14,13 @@ const handleSpacialCard: (rank: number) => number | string = (rank: number) => {
   return rank;
 };
 
-const heartCards = new Array(13)
-  .fill(0)
-  .map((_, i) => `${handleSpacialCard(i + 1)}_of_hearts`);
-const diamondCards = new Array(13)
-  .fill(0)
-  .map((_, i) => `${handleSpacialCard(i + 1)}_of_diamonds`);
-const clubCards = new Array(13)
-  .fill(0)
-  .map((_, i) => `${handleSpacialCard(i + 1)}_of_clubs`);
-const spadeCards = new Array(13)
-  .fill(0)
-  .map((_, i) => `${handleSpacialCard(i + 1)}_of_spades`);
+const generateCards = (suit: string) =>
+  new Array(13).fill(0).map((_, i) => `${handleSpecialCard(i + 1)}_of_${suit}`);
+
+const heartCards = generateCards("hearts");
+const diamondCards = generateCards("diamonds");
+const clubCards = generateCards("clubs");
+const spadeCards = generateCards("spades");
 
 export const Cards = [heartCards, diamondCards, clubCards, spadeCards];
 
@@ -41,29 +36,16 @@ const ImageProvider: React.FC<{
   };
 
   return (
-    <>
-      {isHidden ? (
-        <img
-          src={`/img/card_back_red.png`}
-          alt="spade"
-          style={{
-            width: "90px",
-            height: "125px",
-          }}
-          onContextMenu={preventContextMenu}
-        />
-      ) : (
-        <img
-          src={`/img/${Cards[suit][rank - 1]}.png`}
-          alt={`rank = ${rank}, suit = ${suit}`}
-          style={{
-            width: "90px",
-            height: "125px",
-          }}
-          onContextMenu={preventContextMenu}
-        />
-      )}
-    </>
+    <img
+      src={
+        isHidden
+          ? `/img/card_back_red.png`
+          : `/img/${Cards[suit][rank - 1]}.png`
+      }
+      alt={isHidden ? "card back" : `rank = ${rank}, suit = ${Suite[suit]}`}
+      style={{ width: "90px", height: "125px" }}
+      onContextMenu={preventContextMenu}
+    />
   );
 };
 

@@ -1,4 +1,4 @@
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { useEffect, useState } from "react";
 
@@ -21,42 +21,43 @@ export interface ICardData {
   rank: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 }
 
-const cardData: ICardData[] = [
-  { suit: Suite.clubs, rank: 1 },
-  { suit: Suite.clubs, rank: 4 },
-  { suit: Suite.clubs, rank: 9 },
-  { suit: Suite.clubs, rank: 11 },
-  { suit: Suite.diamonds, rank: 3 },
-  { suit: Suite.spades, rank: 1 },
-  { suit: Suite.spades, rank: 2 },
-  { suit: Suite.spades, rank: 5 },
-  { suit: Suite.spades, rank: 6 },
-  { suit: Suite.spades, rank: 7 },
-  { suit: Suite.spades, rank: 8 },
-  { suit: Suite.spades, rank: 10 },
-  { suit: Suite.spades, rank: 13 },
-  { suit: Suite.hearts, rank: 2 },
-  { suit: Suite.hearts, rank: 3 },
-  { suit: Suite.hearts, rank: 4 },
-  { suit: Suite.hearts, rank: 5 },
-  { suit: Suite.hearts, rank: 6 },
-  { suit: Suite.hearts, rank: 7 },
-  { suit: Suite.hearts, rank: 8 },
-  { suit: Suite.hearts, rank: 9 },
-  { suit: Suite.hearts, rank: 10 },
-  { suit: Suite.hearts, rank: 11 },
-  { suit: Suite.hearts, rank: 12 },
-];
-
 const Solitaire: React.FC = () => {
+  const checkSuite = (st: string) => {
+    switch (st) {
+      case "C":
+        return Suite.clubs;
+      case "H":
+        return Suite.hearts;
+      case "D":
+        return Suite.diamonds;
+      case "S":
+        return Suite.spades;
+    }
+  };
+
+  const checkRank = (st: string) => {
+    switch (st) {
+      case "A":
+        return 1;
+      case "J":
+        return 11;
+      case "Q":
+        return 12;
+      case "K":
+        return 13;
+      default:
+        return Number(st);
+    }
+  };
+
   const [draggedCard, setDraggedCardDetails] = useState<IDraggedCard | null>(
     null
   );
 
   const [draggedStack, setDraggedStack] = useState<IDraggedCard[]>([]);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [_, setIsDragging] = useState<boolean>(false);
 
-  const [deckCardStack, setDeckCardStack] = useState<ICardData[]>(cardData);
+  const [deckCardStack, setDeckCardStack] = useState<ICardData[]>([]);
   const [yardCardStack, setYardCardStack] = useState<ICardData[]>([]);
 
   const [foundationHearts, setFoundationHearts] = useState<IDraggedCard[]>([]);
@@ -66,48 +67,155 @@ const Solitaire: React.FC = () => {
   const [foundationClubs, setFoundationClubs] = useState<IDraggedCard[]>([]);
   const [foundationSpades, setFoundationSpades] = useState<IDraggedCard[]>([]);
 
-  const [tableauCardStack1, setTableauCardStack1] = useState<IDraggedCard[]>([
-    { rank: 13, suit: Suite.clubs, id: "Yard" },
-  ]);
-  const [tableauCardStack2, setTableauCardStack2] = useState<IDraggedCard[]>([
-    { rank: 12, suit: Suite.spades, id: "Yard", isDisabled: true },
-    { rank: 11, suit: Suite.diamonds, id: "Yard" },
-  ]);
-  const [tableauCardStack3, setTableauCardStack3] = useState<IDraggedCard[]>([
-    { rank: 10, suit: Suite.clubs, id: "Yard", isDisabled: true },
-    { rank: 9, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 8, suit: Suite.diamonds, id: "Yard" },
-  ]);
-  const [tableauCardStack4, setTableauCardStack4] = useState<IDraggedCard[]>([
-    { rank: 7, suit: Suite.clubs, id: "Yard", isDisabled: true },
-    { rank: 5, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 4, suit: Suite.spades, id: "Yard", isDisabled: true },
-    { rank: 3, suit: Suite.clubs, id: "Yard" },
-  ]);
-  const [tableauCardStack5, setTableauCardStack5] = useState<IDraggedCard[]>([
-    { rank: 2, suit: Suite.clubs, id: "Yard", isDisabled: true },
-    { rank: 1, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 13, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 12, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 11, suit: Suite.spades, id: "Yard" },
-  ]);
-  const [tableauCardStack6, setTableauCardStack6] = useState<IDraggedCard[]>([
-    { rank: 10, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 9, suit: Suite.spades, id: "Yard", isDisabled: true },
-    { rank: 8, suit: Suite.clubs, id: "Yard", isDisabled: true },
-    { rank: 7, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 6, suit: Suite.clubs, id: "Yard", isDisabled: true },
-    { rank: 6, suit: Suite.diamonds, id: "Yard" },
-  ]);
-  const [tableauCardStack7, setTableauCardStack7] = useState<IDraggedCard[]>([
-    { rank: 5, suit: Suite.clubs, id: "Yard", isDisabled: true },
-    { rank: 4, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 3, suit: Suite.spades, id: "Yard", isDisabled: true },
-    { rank: 2, suit: Suite.diamonds, id: "Yard", isDisabled: true },
-    { rank: 1, suit: Suite.hearts, id: "Yard", isDisabled: true },
-    { rank: 13, suit: Suite.hearts, id: "Yard", isDisabled: true },
-    { rank: 12, suit: Suite.clubs, id: "Yard" },
-  ]);
+  const [tableauCardStack1, setTableauCardStack1] = useState<IDraggedCard[]>(
+    []
+  );
+  const [tableauCardStack2, setTableauCardStack2] = useState<IDraggedCard[]>(
+    []
+  );
+  const [tableauCardStack3, setTableauCardStack3] = useState<IDraggedCard[]>(
+    []
+  );
+  const [tableauCardStack4, setTableauCardStack4] = useState<IDraggedCard[]>(
+    []
+  );
+  const [tableauCardStack5, setTableauCardStack5] = useState<IDraggedCard[]>(
+    []
+  );
+  const [tableauCardStack6, setTableauCardStack6] = useState<IDraggedCard[]>(
+    []
+  );
+  const [tableauCardStack7, setTableauCardStack7] = useState<IDraggedCard[]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async (id: number) => {
+      const data = await fetch(`http://localhost:9000/${id}`);
+      const jsonData = await data.json();
+      const patten = `scenario${id + 1}`;
+      setDeckCardStack(
+        jsonData[patten]["deck"].map((cardData: string) => ({
+          suit: checkSuite(cardData.substring(cardData.length - 1)),
+          rank: checkRank(cardData.substring(0, cardData.length - 1)),
+        }))
+      );
+      setTableauCardStack1(
+        jsonData[patten]["tableau"][0].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][0].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+      setTableauCardStack2(
+        jsonData[patten]["tableau"][1].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][1].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+      setTableauCardStack3(
+        jsonData[patten]["tableau"][2].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][2].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+      setTableauCardStack4(
+        jsonData[patten]["tableau"][3].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][3].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+      setTableauCardStack5(
+        jsonData[patten]["tableau"][4].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][4].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+      setTableauCardStack6(
+        jsonData[patten]["tableau"][5].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][5].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+      setTableauCardStack7(
+        jsonData[patten]["tableau"][6].map((cardData: string, i: number) =>
+          i === jsonData[patten]["tableau"][6].length - 1
+            ? {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                id: "yard",
+              }
+            : {
+                suit: checkSuite(cardData.substring(cardData.length - 1)),
+                rank: checkRank(cardData.substring(0, cardData.length - 1)),
+                isDisabled: true,
+                id: "yard",
+              }
+        )
+      );
+    };
+    var randomValue = Math.round(Math.random() * 10);
+    fetchData(randomValue);
+  }, []);
 
   const tableauCardCheck = (
     stack: IDraggedCard[],
@@ -186,12 +294,7 @@ const Solitaire: React.FC = () => {
 
   useEffect(() => {
     checkForFoundation();
-  }, [
-    foundationClubs,
-    foundationDiamonds,
-    foundationHearts,
-    foundationSpades
-  ]);
+  }, [foundationClubs, foundationDiamonds, foundationHearts, foundationSpades]);
 
   const checkForFoundation = () => {
     if (yardCardStack.length > 0) {

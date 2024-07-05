@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 import { IDraggedCard } from "../../Playground/Solitaire";
 import { Suite } from "../PokerCard";
-
 
 export interface IDraggableProps {
   id: string;
@@ -26,20 +25,21 @@ const Draggable: React.FC<React.PropsWithChildren<IDraggableProps>> = ({
     useDraggable({
       id: id,
     });
-  const style = {
-    transform: CSS.Translate.toString(transform),
-  };
+  const style = useMemo(
+    () => ({
+      transform: CSS.Translate.toString(transform),
+    }),
+    [transform]
+  );
 
   useEffect(() => {
-    if (isDragging){
-      if(child !== undefined){
-        onDragging({ rank: rank, suit: suit , id: id, child: child});
+    if (isDragging) {
+      if (child !== undefined) {
+        onDragging({ rank: rank, suit: suit, id: id, child: child });
+      } else {
+        onDragging({ rank: rank, suit: suit, id: id });
       }
-      else{
-        onDragging({ rank: rank, suit: suit , id: id});
-      }
-    } 
-    else onDragging(null);
+    } else onDragging(null);
   }, [isDragging]);
 
   return (

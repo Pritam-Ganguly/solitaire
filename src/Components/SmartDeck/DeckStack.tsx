@@ -3,13 +3,13 @@ import { Suite } from "../PokerCard";
 import { Card } from "react-bootstrap";
 import ImageProvider from "../../assets/img/ImageProvider";
 
-const DeckStack: React.FC<{
+interface DeckStackProps {
   onClick: () => void;
-}> = ({ onClick }) => {
+}
+
+const DeckStack: React.FC<DeckStackProps> = ({ onClick }) => {
   return (
-    <div
-      onClick={() => onClick()}
-    >
+    <div onClick={() => onClick()}>
       <Card className="deckStack">
         <ImageProvider rank={1} suit={Suite.clubs} isHidden={true} />
       </Card>

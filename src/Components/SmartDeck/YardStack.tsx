@@ -1,10 +1,9 @@
 import { Card } from "react-bootstrap";
-
 import PokerCard from "../PokerCard";
 import { ICardData, IDraggedCard } from "../../Playground/Solitaire";
 import { Cards } from "../../assets/img/ImageProvider";
 import { animated, useSpringRef, useTransition } from "@react-spring/web";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 interface IYardStack {
   currCard: ICardData | null;
@@ -39,15 +38,18 @@ const YardStack: React.FC<IYardStack> = ({
     transRef.start();
   }, [rerender]);
 
-  const yardStackStyle = {
-    backgroundImage:
-      prevCard !== null
-        ? `url('/img/${Cards[prevCard?.suit][prevCard?.rank - 1]}.png')`
-        : "",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  };
+  const yardStackStyle = useMemo(
+    () => ({
+      backgroundImage:
+        prevCard !== null
+          ? `url('/img/${Cards[prevCard.suit][prevCard.rank - 1]}.png')`
+          : "",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+    }),
+    [prevCard]
+  );
 
   const cardDraggable =
     currCard !== null ? (
@@ -72,11 +74,7 @@ const YardStack: React.FC<IYardStack> = ({
       </>
     );
 
-  return (
-    <>
-      <Card style={yardStackStyle}>{cardDraggable}</Card>
-    </>
-  );
+  return <Card style={yardStackStyle}>{cardDraggable}</Card>;
 };
 
 export default YardStack;
