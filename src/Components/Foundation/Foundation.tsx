@@ -7,21 +7,20 @@ import ImageProvider from "../../assets/img/ImageProvider";
 const Foundation: React.FC<{
   type: Suite;
   foundationStack: IDraggedCard[];
-}> = ({ type, foundationStack }) => {
+}> = ({ foundationStack }) => {
+  const hasCards = foundationStack.length > 0;
+  const topCard = foundationStack[0];
+
   return (
-    <>
-      {foundationStack.length > 0 ? (
-        <Card>
-          <ImageProvider
-            rank={foundationStack[0]?.rank}
-            suit={foundationStack[0]?.suit}
-            isHidden={false}
-          />
-        </Card>
-      ) : (
-        <Card></Card>
-      )}
-    </>
+    <Card>
+      {hasCards && topCard ? (
+        <ImageProvider
+          rank={topCard.rank}
+          suit={topCard.suit}
+          isHidden={false}
+        />
+      ) : null}
+    </Card>
   );
 };
 

@@ -10,20 +10,27 @@ export enum Suite {
   clubs = 2,
   spades = 3,
 }
-export interface IPokerCardProps extends IDraggedCard{
+export interface IPokerCardProps extends IDraggedCard {
   isHidden: boolean;
-  onDragging: (cardDetails: IDraggedCard | null) => void,
-  id: string,
-  style?: any
+  onDragging: (cardDetails: IDraggedCard | null) => void;
+  id: string;
+  style?: any;
 }
 
-const PokerCard: React.FC<IPokerCardProps> = ({ rank, suit, isHidden, onDragging, id, style }) => {
+const PokerCard: React.FC<IPokerCardProps> = ({
+  rank,
+  suit,
+  isHidden,
+  onDragging,
+  id,
+  style,
+}) => {
   return (
     <>
       {isHidden ? (
-          <Card style={style} id={id}>
-            <ImageProvider rank={rank} suit={suit} isHidden={isHidden} />
-          </Card>
+        <Card style={style} id={id}>
+          <ImageProvider rank={rank} suit={suit} isHidden={isHidden} />
+        </Card>
       ) : (
         <Draggable id={id} rank={rank} suit={suit} onDragging={onDragging}>
           <Card style={style}>

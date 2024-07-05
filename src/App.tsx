@@ -5,9 +5,7 @@ import Solitaire from "./Playground/Solitaire";
 function App() {
   return (
     <div className="App">
-    <div className="App">
-      <Solitaire/>
-    </div>
+      <Solitaire />
     </div>
   );
 }
