@@ -6,8 +6,6 @@ Screens:
 
 ![alt text](image.png)
 
-Demo: [Download the video](solitaire_demo.mp4)
-
 
 ### TODOs: 
 
