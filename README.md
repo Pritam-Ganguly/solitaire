@@ -6,7 +6,14 @@ Screens:
 
 ![alt text](image.png)
 
-# TODO: 
+Demo: 
+
+<video width="320" height="240" controls>
+  <source src="/solitaire_demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+### TODOs: 
 
 1. Need to create proper scenarios. 
 2. Need to fix some minor bugs regarding drag and drop.
