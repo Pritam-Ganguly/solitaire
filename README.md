@@ -1,6 +1,6 @@
 # Solitaire
 
-Here's my attempt at recreating the popular signle player cardgame Solitaire.
+Here's my attempt at recreating the popular single player cardgame Solitaire.
 
 Screens: 
 
